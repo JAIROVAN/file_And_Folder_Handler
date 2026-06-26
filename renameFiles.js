@@ -1,0 +1,298 @@
+const fs = require('fs');
+const path = require('path');
+
+const files = [
+    /*
+  ['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0986298.pdf', '986298'],
+  ['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0986299.pdf', '986299'],
+  ['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0986434.pdf', '986434'],
+  ['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0990675.pdf', '990675']
+
+*/
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0990677.pdf','990677'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0994899.pdf','994899'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0995320.pdf','995320'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0997954.pdf','997954'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0997958.pdf','997958'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0998030.pdf','998030'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0998202.pdf','998202'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0998558.pdf','998558'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0058282.pdf','58282'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0058283.pdf','58283'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0058298.pdf','58298'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0058831.pdf','58831'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0058832.pdf','58832'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0059479.pdf','59479'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0059539.pdf','59539'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0059854.pdf','59854'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0059855.pdf','59855'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0059869.pdf','59869'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0059913.pdf','59913'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0059987.pdf','59987'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0979438.PDF','979438'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0979609.PDF','979609'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0979612.PDF','979612'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0979615.PDF','979615'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0979617.PDF','979617'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0979897.PDF','979897'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0980379.PDF','980379'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0983978.pdf','983978'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0987805.pdf','987805'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0987808.pdf','987808'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0987813.pdf','987813'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0987818.pdf','987818'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0987828.pdf','987828'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0987837.pdf','987837'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0057555.pdf','57555'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0057584.pdf','57584'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0057585.pdf','57585'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0057586.pdf','57586'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0057587.pdf','57587'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0057615.pdf','57615'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0057695.pdf','57695'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0057964.pdf','57964'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0058429.pdf','58429'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0058430.pdf','58430'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0058431.pdf','58431'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0058432.pdf','58432'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0058433.pdf','58433'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0058434.pdf','58434'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\nfs 57694.pdf','57694'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0979871.PDF','979871'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0979878.PDF','979878'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0979884.PDF','979884'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0979895.PDF','979895'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0979900.PDF','979900'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0979901.PDF','979901'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0979902.PDF','979902'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0979955.PDF','979955'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0980048.PDF','980048'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0057611.pdf','57611'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0057612.pdf','57612'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0057613.pdf','57613'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0057614.pdf','57614'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0057616.pdf','57616'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0057617.pdf','57617'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0057618.pdf','57618'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0057631.pdf','57631'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0057635.pdf','57635'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0057823.pdf','57823'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF1017887.PDF','1017887'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF1017889.PDF','1017889'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0061267.pdf','61267'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0062458.pdf','62458'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0062459.pdf','62459'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\59561.pdf','59561'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0995321.PDF','995321'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0995322.PDF','995322'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0995338.PDF','995338'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0995344.PDF','995344'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0995351.PDF','995351'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0995357.PDF','995357'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0995361.PDF','995361'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0995364.PDF','995364'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0995379.PDF','995379'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0995380.PDF','995380'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0995381.PDF','995381'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0995402.PDF','995402'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0059537.pdf','59537'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0059538.pdf','59538'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0059544.pdf','59544'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0059545.pdf','59545'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0059546.pdf','59546'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0059547.pdf','59547'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0059548.pdf','59548'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0059549.pdf','59549'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0059550.pdf','59550'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0059551.pdf','59551'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0059552.pdf','59552'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0059553.pdf','59553'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0059554.pdf','59554'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0059555.pdf','59555'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0059556.pdf','59556'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF0982491.pdf','982491'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0057868.pdf','57868'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF1021973.pdf','1021973'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF1021975.pdf','1021975'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0062956.pdf','62956'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0062957.pdf','62957'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF1010346.PDF','1010346'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF1010348.PDF','1010348'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF1010367.PDF','1010367'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF1010371.PDF','1010371'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF1010381.PDF','1010381'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF1010387.PDF','1010387'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF1010394.PDF','1010394'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF1010397.PDF','1010397'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF1010398.PDF','1010398'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF1010401.PDF','1010401'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF1011667.PDF','1011667'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF1011670.PDF','1011670'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF1011708.PDF','1011708'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF1011926.PDF','1011926'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF1013662.PDF','1013662'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0061257.pdf','61257'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0061258.pdf','61258'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0061259.pdf','61259'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0061260.pdf','61260'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0061261.pdf','61261'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0061262.pdf','61262'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0061264.pdf','61264'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0061265.pdf','61265'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0061266.pdf','61266'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0061490.pdf','61490'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0061491.pdf','61491'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0061499.pdf','61499'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0061529.pdf','61529'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0061768.pdf','61768'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF1017471.pdf','1017471'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0062392.pdf','62392'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF1030577.PDF','1030577'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF1030579.PDF','1030579'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF1030580.PDF','1030580'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF1030581.PDF','1030581'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0063998.pdf','63998'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0063999.pdf','63999'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0064000.pdf','64000'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0064001.pdf','64001'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF1017485.pdf','1017485'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0062398.pdf','62398'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0062663.pdf','62663'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF1016947.pdf','1016947'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0062313.pdf','62313'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF1031738.PDF.pdf','1031738'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0064247.pdf','64247'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NF1029139.PDF.pdf','1029139'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\NFS-0063884.pdf','63884'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\995488.pdf','995488'],
+['C:\\Users\\m169161\\Desktop\\CONTRATOS\\PGF\\HEXIS\\NOTAS\\59582.pdf','59582']
+];
+
+async function arquivoExiste(filePath) {
+  try {
+    await fs.promises.access(filePath);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function montarNovoCaminho(caminhoAtual, novoNome) {
+  const pasta = path.dirname(caminhoAtual);
+  const extensaoAtual = path.extname(caminhoAtual);
+
+  // Se o novo nome já tiver extensão, usa como está.
+  // Se não tiver, acrescenta a extensão original.
+  const novoNomeComExtensao = path.extname(novoNome)
+    ? novoNome
+    : novoNome + extensaoAtual;
+
+  return path.join(pasta, novoNomeComExtensao);
+}
+
+async function renomearArquivos() {
+  const arquivosRenomeados = [];
+  const arquivosNaoRenomeados = [];
+
+  for (const item of files) {
+    const caminhoAtual = item[0];
+    const novoNome = item[1];
+
+    const novoCaminho = montarNovoCaminho(caminhoAtual, novoNome);
+
+    try {
+      // Verifica se o arquivo de origem existe
+      const origemExiste = await arquivoExiste(caminhoAtual);
+
+      if (!origemExiste) {
+        throw {
+          code: 'ENOENT',
+          message: 'Arquivo de origem não encontrado.'
+        };
+      }
+
+      // Verifica se já existe arquivo com o novo nome
+      const destinoExiste = await arquivoExiste(novoCaminho);
+
+      if (destinoExiste) {
+        throw {
+          code: 'EEXIST',
+          message: 'Já existe um arquivo com o novo nome. O arquivo não foi renomeado.'
+        };
+      }
+
+      // Renomeia o arquivo
+      await fs.promises.rename(caminhoAtual, novoCaminho);
+
+      arquivosRenomeados.push({
+        antigo: caminhoAtual,
+        novo: novoCaminho
+      });
+
+      console.log('Arquivo renomeado com sucesso:');
+      console.log('De:   ' + caminhoAtual);
+      console.log('Para: ' + novoCaminho);
+      console.log('-----------------------------');
+
+    } catch (error) {
+      arquivosNaoRenomeados.push({
+        antigo: caminhoAtual,
+        novo: novoCaminho,
+        motivo: error.message,
+        codigoErro: error.code || 'SEM_CODIGO'
+      });
+
+      console.log('Arquivo NÃO renomeado:');
+      console.log('Arquivo: ' + caminhoAtual);
+      console.log('Motivo: ' + error.message);
+      console.log('-----------------------------');
+    }
+  }
+
+  let relatorio = '';
+
+  relatorio += 'RELATÓRIO DE RENOMEAÇÃO DE ARQUIVOS\n';
+  relatorio += '===================================\n\n';
+
+  relatorio += `Total de arquivos informados: ${files.length}\n`;
+  relatorio += `Total renomeados com sucesso: ${arquivosRenomeados.length}\n`;
+  relatorio += `Total não renomeados: ${arquivosNaoRenomeados.length}\n\n`;
+
+  relatorio += 'ARQUIVOS RENOMEADOS COM SUCESSO\n';
+  relatorio += '-------------------------------\n';
+
+  if (arquivosRenomeados.length === 0) {
+    relatorio += 'Nenhum arquivo foi renomeado.\n\n';
+  } else {
+    arquivosRenomeados.forEach((item, index) => {
+      relatorio += `${index + 1}. De:\n`;
+      relatorio += `   ${item.antigo}\n`;
+      relatorio += `   Para:\n`;
+      relatorio += `   ${item.novo}\n\n`;
+    });
+  }
+
+  relatorio += '\nARQUIVOS NÃO RENOMEADOS\n';
+  relatorio += '-----------------------\n';
+
+  if (arquivosNaoRenomeados.length === 0) {
+    relatorio += 'Todos os arquivos foram renomeados com sucesso.\n';
+  } else {
+    arquivosNaoRenomeados.forEach((item, index) => {
+      relatorio += `${index + 1}. Arquivo original:\n`;
+      relatorio += `   ${item.antigo}\n`;
+      relatorio += `   Novo caminho previsto:\n`;
+      relatorio += `   ${item.novo}\n`;
+      relatorio += `   Motivo: ${item.motivo}\n`;
+      relatorio += `   Código do erro: ${item.codigoErro}\n\n`;
+    });
+  }
+
+  console.log('\n' + relatorio);
+
+  await fs.promises.writeFile('relatorio_renomeacao.txt', relatorio, 'utf8');
+
+  console.log('Relatório gerado: relatorio_renomeacao.txt');
+}
+
+renomearArquivos();
