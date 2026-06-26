@@ -1,4 +1,13 @@
 {
+  "scripts": {
+    "listar": "node src/apps/listarArquivos.js",
+    "copiar": "node src/apps/copiarArquivos.js",
+    "renomear": "node src/apps/renomearArquivos.js",
+    "mover": "node src/apps/moverArquivos.js",
+    "excluir": "node src/apps/excluirArquivos.js",
+    "ler-pdf": "node src/apps/lerPdf.js",
+    "ler-notas": "node src/apps/lerNotasFiscaisPdf.js"
+  },
   "dependencies": {
     "pdf-parse": "^1.1.1"
   }
