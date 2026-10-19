@@ -92,3 +92,11 @@ Varre a pasta informada e todas as subpastas, le todos os `.xls`/`.xlsx`/`.ods` 
 ```
 
 Cada linha com conteudo de cada aba vira uma linha do array (linhas totalmente vazias sao descartadas). Cada execucao cria um arquivo novo e nunca sobrescreve: se `result_<pasta>.json` ja existir, cria `result_<pasta>_2.json`, `_3`... Um segundo argumento opcional define outra pasta de saida. Requer o projeto `xlsx_Handler` (com `exceljs` instalado) ao lado deste projeto.
+
+### Gerar planilha a partir dos JSON (`gerarPlanilhaAtravesDeArraysJsons.js`)
+
+Junta todos os `.json` gerados pelo `lerPlanilhas.js` que estao diretamente na pasta informada (sem subpastas) e cria `planilha_<nome da pasta>.xlsx` nessa mesma pasta, com todas as linhas numa unica aba, sem cabecalho e mantendo linhas repetidas. Acima de 1.048.576 linhas continua na aba `Dados 2`. Nunca sobrescreve (cria `planilha_<pasta> (1).xlsx`). Um segundo argumento opcional define outra pasta de saida.
+
+```bash
+node src\apps\gerarPlanilhaAtravesDeArraysJsons.js "C:\pasta\com\os\jsons"
+```

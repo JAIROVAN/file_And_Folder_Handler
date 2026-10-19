@@ -29,7 +29,7 @@ async function localizarMyExcel() {
 
   const procurados = XLSX_HANDLER_CANDIDATES.map((folder) => `  - ${folder}`).join("\n");
   throw new Error(
-    `Projeto xlsx_Handler nao encontrado (necessario para ler .xlsx). Procurado em:\n${procurados}\n` +
+    `Projeto xlsx_Handler nao encontrado (necessario para ler/gerar .xlsx). Procurado em:\n${procurados}\n` +
     "Coloque a pasta xlsx_Handler em um desses locais ou defina a variavel de ambiente XLSX_HANDLER_FOLDER."
   );
 }
