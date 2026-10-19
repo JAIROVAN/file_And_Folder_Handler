@@ -1,3 +1,25 @@
+/*
+ * Le todos os .xls/.xlsx de uma pasta (e subpastas) e gera um result.js com:
+ *   const dados = [[caminhoCompleto, nomeArquivo, nomeAba, ...celulasDaLinha], ...];
+ *
+ * COMO RODAR (terminal do VS Code aberto na pasta src\apps):
+ *
+ *   node lerPlanilhas.js "C:\caminho\da\pasta\com\planilhas"
+ *
+ *   - Use aspas no caminho (obrigatorio se tiver espacos ou acentos).
+ *   - Dica: arraste a pasta do Windows Explorer para o terminal para colar o caminho.
+ *   - O resultado sai em <raiz do projeto>\reports\result.js (qualquer que seja a pasta do terminal).
+ *
+ * Para salvar o resultado em outro lugar, informe o arquivo de saida como 2o argumento:
+ *
+ *   node lerPlanilhas.js "C:\pasta\com\planilhas" "C:\Users\m169161\Desktop\result.js"
+ *
+ * Da raiz do projeto tambem funciona: node src\apps\lerPlanilhas.js "C:\pasta"
+ *
+ * Requisito: o projeto xlsx_Handler (com node_modules\exceljs instalado) deve estar na pasta
+ * configurada em XLSX_HANDLER_FOLDER (src\config\paths.js).
+ */
+
 import path from "path";
 import { DEFAULT_IGNORED_FOLDERS, DEFAULT_REPORT_FOLDER } from "../config/paths.js";
 import { listarArquivos } from "../lib/fileScanner.js";
@@ -16,7 +38,6 @@ function lerArgumentoCaminho(value) {
   return value ? value.replace(/"+$/, "").trim() : value;
 }
 
-// Uso: npm run ler-planilhas -- "C:\pasta\com\planilhas" ["C:\saida\result.js"]
 const CONFIG = {
   rootFolder: lerArgumentoCaminho(process.argv[2]),
   outputPath: lerArgumentoCaminho(process.argv[3]) || path.join(DEFAULT_REPORT_FOLDER, "result.js"),
@@ -32,7 +53,7 @@ function montarConteudoJs(variableName, rows) {
 async function main() {
   try {
     if (!CONFIG.rootFolder) {
-      throw new Error('Informe a pasta: npm run ler-planilhas -- "C:\\pasta"');
+      throw new Error('Informe a pasta: node lerPlanilhas.js "C:\\pasta" (veja o comentario no topo de lerPlanilhas.js)');
     }
 
     const rootFolder = path.resolve(CONFIG.rootFolder);
