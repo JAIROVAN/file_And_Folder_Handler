@@ -91,7 +91,7 @@ const dados = [
 ];
 ```
 
-Cada linha com conteudo de cada aba vira uma linha do array (linhas totalmente vazias sao descartadas). Um segundo argumento opcional define outro caminho de saida. Requer `npm install` tambem no projeto `xlsx_Handler`.
+Cada linha com conteudo de cada aba vira uma linha do array (linhas totalmente vazias sao descartadas). Se o `result.js` ja existir, os dados sao acumulados nele (linhas de arquivos relidos sao substituidas, sem duplicar); use `--novo` para comecar do zero. Um segundo argumento opcional define outro caminho de saida. Requer `npm install` tambem no projeto `xlsx_Handler`.
 
 Tambem e possivel rodar direto:
 
