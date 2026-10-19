@@ -6,7 +6,10 @@ import * as cptable from "../vendor/sheetjs/cpexcel.full.mjs";
 import { XLSX_HANDLER_CANDIDATES } from "../config/paths.js";
 import { caminhoExiste } from "./pathUtils.js";
 
-export const EXTENSOES_PLANILHA = [".xls", ".xlsx"];
+export const EXTENSOES_PLANILHA = [".xls", ".xlsx", ".ods"];
+
+// Formatos lidos pelo SheetJS; o .xlsx vai para o myExcel.js do xlsx_Handler.
+const EXTENSOES_SHEETJS = [".xls", ".ods"];
 
 const EXCEL_TEMP_PREFIX = "~$";
 
@@ -84,7 +87,7 @@ function normalizarValorXlsx(value) {
   return value instanceof Date ? formatarDataExcelJs(value) : value;
 }
 
-function lerValorCelulaXls(cell) {
+function lerValorCelulaSheetJs(cell) {
   if (!cell || cell.v === undefined || cell.v === null) {
     return "";
   }
@@ -110,7 +113,7 @@ function temConteudo(value) {
 
 // Percorre so as celulas existentes e monta a grade ate a ultima linha/coluna com dados,
 // para nao estourar memoria quando o "!ref" da aba cobre linhas/colunas inteiras formatadas.
-function lerAbaXls(sheet) {
+function lerAbaSheetJs(sheet) {
   const celulasPorLinha = new Map();
   let ultimaLinha = -1;
   let ultimaColuna = -1;
@@ -120,7 +123,7 @@ function lerAbaXls(sheet) {
       continue;
     }
 
-    const value = lerValorCelulaXls(sheet[address]);
+    const value = lerValorCelulaSheetJs(sheet[address]);
 
     if (!temConteudo(value)) {
       continue;
@@ -152,13 +155,33 @@ function lerAbaXls(sheet) {
   return rows;
 }
 
-async function lerPlanilhaXls(filePath) {
+// O SheetJS emite este aviso via console.error para formatos condicionais do LibreOffice.
+// Ele so afeta o texto formatado (usamos o valor bruto), entao e descartado para nao poluir o log.
+const AVISO_SHEETJS_IGNORADO = "ODS number format may be incorrect";
+
+function lerWorkbookSheetJs(buffer) {
+  const consoleError = console.error;
+
+  console.error = (...args) => {
+    if (!String(args[0]).startsWith(AVISO_SHEETJS_IGNORADO)) {
+      consoleError(...args);
+    }
+  };
+
+  try {
+    return XLSX.read(buffer, { cellNF: true });
+  } finally {
+    console.error = consoleError;
+  }
+}
+
+async function lerPlanilhaSheetJs(filePath) {
   const buffer = await fs.readFile(filePath);
-  const workbook = XLSX.read(buffer, { cellNF: true });
+  const workbook = lerWorkbookSheetJs(buffer);
 
   return workbook.SheetNames.map((sheetName) => ({
     sheetName,
-    rows: lerAbaXls(workbook.Sheets[sheetName])
+    rows: lerAbaSheetJs(workbook.Sheets[sheetName])
   }));
 }
 
@@ -177,7 +200,7 @@ export function ehArquivoTemporarioExcel(fileName) {
 }
 
 /**
- * Le todas as abas de um .xls ou .xlsx.
+ * Le todas as abas de um .xls, .xlsx ou .ods.
  * Retorna [{ sheetName, rows: [[...valores]] }], com linhas vazias preservadas,
  * datas como "dd/mm/aaaa" e formulas pelo valor calculado.
  */
@@ -188,8 +211,8 @@ export async function lerPlanilha(filePath) {
     return lerPlanilhaXlsx(filePath);
   }
 
-  if (extension === ".xls") {
-    return lerPlanilhaXls(filePath);
+  if (EXTENSOES_SHEETJS.includes(extension)) {
+    return lerPlanilhaSheetJs(filePath);
   }
 
   throw new Error(`Extensao nao suportada: "${extension}".`);

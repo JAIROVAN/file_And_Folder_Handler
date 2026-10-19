@@ -1,5 +1,5 @@
 /*
- * Le todos os .xls/.xlsx de uma pasta (e subpastas) e gera um result.js com:
+ * Le todos os .xls/.xlsx/.ods de uma pasta (e subpastas) e gera um result.js com:
  *   const dados = [[caminhoCompleto, nomeArquivo, nomeAba, ...celulasDaLinha], ...];
  *
  * COMO RODAR (terminal do VS Code aberto na pasta src\apps):
