@@ -21,6 +21,8 @@
  * em src\config\paths.js.
  */
 
+import fs from "fs";
+import { once } from "events";
 import path from "path";
 import { DEFAULT_IGNORED_FOLDERS, DEFAULT_REPORT_FOLDER } from "../config/paths.js";
 import { listarArquivos } from "../lib/fileScanner.js";
@@ -32,7 +34,6 @@ import {
   ehArquivoTemporarioExcel,
   lerPlanilha
 } from "../lib/planilhaReader.js";
-import { salvarTxt } from "../lib/reportUtils.js";
 import { isMain } from "../lib/runApp.js";
 
 // No cmd do Windows, "C:\pasta\" (barra final antes da aspa) chega como C:\pasta" -> remove a aspa sobrando.
@@ -47,9 +48,35 @@ const CONFIG = {
   variableName: "dados"
 };
 
-function montarConteudoJs(variableName, rows) {
-  const body = rows.map((row) => `  ${JSON.stringify(row)}`).join(",\n");
-  return `const ${variableName} = [\n${body}\n];\n`;
+// Grava o result.js linha a linha, sem montar todo o conteudo na memoria.
+async function abrirSaidaJs(outputPath, variableName) {
+  await fs.promises.mkdir(path.dirname(outputPath), { recursive: true });
+
+  const stream = fs.createWriteStream(outputPath, { encoding: "utf8" });
+  let total = 0;
+
+  async function escrever(text) {
+    if (!stream.write(text)) {
+      await once(stream, "drain");
+    }
+  }
+
+  await escrever(`const ${variableName} = [\n`);
+
+  return {
+    get total() {
+      return total;
+    },
+    async adicionarLinha(row) {
+      await escrever(`${total ? ",\n" : ""}  ${JSON.stringify(row)}`);
+      total += 1;
+    },
+    async fechar() {
+      await escrever("\n];\n");
+      stream.end();
+      await once(stream, "finish");
+    }
+  };
 }
 
 async function main() {
@@ -82,17 +109,19 @@ async function main() {
       await carregarMyExcel();
     }
 
-    const dados = [];
+    const saida = await abrirSaidaJs(CONFIG.outputPath, CONFIG.variableName);
     const resumo = [];
 
-    for (const file of files) {
+    for (const [index, file] of files.entries()) {
+      logInfo(`(${index + 1}/${files.length}) Lendo: ${file.fullPath}`);
+
       try {
         const sheets = await lerPlanilha(file.fullPath);
         let linhas = 0;
 
         for (const { sheetName, rows } of sheets) {
           for (const row of rows) {
-            dados.push([file.fullPath, file.name, sheetName, ...row]);
+            await saida.adicionarLinha([file.fullPath, file.name, sheetName, ...row]);
           }
 
           linhas += rows.length;
@@ -105,12 +134,11 @@ async function main() {
       }
     }
 
+    await saida.fechar();
     logTabela(resumo);
 
-    await salvarTxt(CONFIG.outputPath, montarConteudoJs(CONFIG.variableName, dados));
-
     const erros = resumo.filter((item) => item.Status === "ERRO").length;
-    logInfo(`Linhas geradas: ${dados.length}`);
+    logInfo(`Linhas geradas: ${saida.total}`);
     logInfo(`Arquivos com erro: ${erros}`);
     logInfo(`Arquivo criado: ${CONFIG.outputPath}`);
 

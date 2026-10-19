@@ -104,20 +104,46 @@ function lerValorCelulaXls(cell) {
   return cell.v;
 }
 
+function temConteudo(value) {
+  return value !== "" && value !== null && value !== undefined;
+}
+
+// Percorre so as celulas existentes e monta a grade ate a ultima linha/coluna com dados,
+// para nao estourar memoria quando o "!ref" da aba cobre linhas/colunas inteiras formatadas.
 function lerAbaXls(sheet) {
-  if (!sheet["!ref"]) {
-    return [];
+  const celulasPorLinha = new Map();
+  let ultimaLinha = -1;
+  let ultimaColuna = -1;
+
+  for (const address of Object.keys(sheet)) {
+    if (address.startsWith("!")) {
+      continue;
+    }
+
+    const value = lerValorCelulaXls(sheet[address]);
+
+    if (!temConteudo(value)) {
+      continue;
+    }
+
+    const { r, c } = XLSX.utils.decode_cell(address);
+
+    if (!celulasPorLinha.has(r)) {
+      celulasPorLinha.set(r, []);
+    }
+
+    celulasPorLinha.get(r).push([c, value]);
+    ultimaLinha = Math.max(ultimaLinha, r);
+    ultimaColuna = Math.max(ultimaColuna, c);
   }
 
-  const range = XLSX.utils.decode_range(sheet["!ref"]);
   const rows = [];
 
-  for (let rowIndex = 0; rowIndex <= range.e.r; rowIndex += 1) {
-    const values = [];
+  for (let rowIndex = 0; rowIndex <= ultimaLinha; rowIndex += 1) {
+    const values = new Array(ultimaColuna + 1).fill("");
 
-    for (let columnIndex = 0; columnIndex <= range.e.c; columnIndex += 1) {
-      const address = XLSX.utils.encode_cell({ r: rowIndex, c: columnIndex });
-      values.push(lerValorCelulaXls(sheet[address]));
+    for (const [columnIndex, value] of celulasPorLinha.get(rowIndex) ?? []) {
+      values[columnIndex] = value;
     }
 
     rows.push(values);
