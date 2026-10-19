@@ -6,9 +6,11 @@
     "mover": "node src/apps/moverArquivos.js",
     "excluir": "node src/apps/excluirArquivos.js",
     "ler-pdf": "node src/apps/lerPdf.js",
-    "ler-notas": "node src/apps/lerNotasFiscaisPdf.js"
+    "ler-notas": "node src/apps/lerNotasFiscaisPdf.js",
+    "ler-planilhas": "node src/apps/lerPlanilhas.js"
   },
   "dependencies": {
-    "pdf-parse": "^1.1.1"
+    "pdf-parse": "^1.1.1",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   }
 }

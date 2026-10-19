@@ -8,6 +8,8 @@ export const PROJECT_ROOT = path.resolve(currentFolder, "..", "..");
 
 export const DEFAULT_REPORT_FOLDER = path.join(PROJECT_ROOT, "reports");
 
+export const XLSX_HANDLER_FOLDER = path.resolve(PROJECT_ROOT, "..", "..", "xlsx_Handler");
+
 export const DEFAULT_IGNORED_FOLDERS = [
   "node_modules",
   "docsTxt",

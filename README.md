@@ -40,6 +40,7 @@ src/
 - `fileScanner.js`: lista arquivos com ou sem subpastas, filtra extensoes e ignora pastas como `node_modules`, `docsTxt` e `.git`.
 - `fileOps.js`: copia, renomeia, move e exclui arquivos com validacoes, sem sobrescrever por padrao, com suporte a `dryRun`.
 - `pdfUtils.js`: le texto de PDFs e processa todos os PDFs de uma pasta.
+- `planilhaReader.js`: le todas as abas de `.xlsx` (via `myExcel.js` do projeto `xlsx_Handler`, caminho em `XLSX_HANDLER_FOLDER`) e `.xls` (via SheetJS), com datas em `dd/mm/aaaa` e formulas pelo valor calculado.
 - `nfeExtractor.js`: extrai dados especificos de notas fiscais a partir do texto ja lido do PDF.
 - `reportUtils.js`: salva relatorios em JSON, CSV e TXT e formata relatorios de operacao.
 - `logger.js`: centraliza logs simples, erros, tabelas e resumo final.
@@ -76,7 +77,21 @@ npm run mover
 npm run excluir
 npm run ler-pdf
 npm run ler-notas
+npm run ler-planilhas -- "C:\pasta\com\planilhas"
 ```
+
+### Ler planilhas (`ler-planilhas`)
+
+Varre a pasta informada e todas as subpastas, le todos os `.xls`/`.xlsx` (ignora temporarios `~$`) e gera `reports/result.js` com:
+
+```js
+const dados = [
+  ["C:\\pasta\\sub\\vendas.xlsx", "vendas.xlsx", "Aba1", "valor A1", "valor B1"],
+  ...
+];
+```
+
+Cada linha de cada aba vira uma linha do array (inclusive linhas vazias). Um segundo argumento opcional define outro caminho de saida. Requer `npm install` tambem no projeto `xlsx_Handler`.
 
 Tambem e possivel rodar direto:
 

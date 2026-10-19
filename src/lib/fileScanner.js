@@ -41,14 +41,41 @@ export async function listarArquivos(rootFolder, options = {}) {
   const {
     recursive = true,
     extensions = [],
-    ignoredFolders = DEFAULT_IGNORED_FOLDERS
+    ignoredFolders = DEFAULT_IGNORED_FOLDERS,
+    onAccessError = null
   } = options;
 
   const extensionSet = normalizarExtensoes(extensions);
   const result = [];
 
+  // Sem onAccessError, qualquer erro de leitura interrompe a varredura (comportamento original).
+  // Com onAccessError, pastas/arquivos sem permissao (EPERM/EACCES no Windows) sao reportados e pulados.
+  async function tentar(action, targetPath) {
+    try {
+      return await action();
+    } catch (error) {
+      if (!onAccessError || currentFolderIsRoot(targetPath)) {
+        throw error;
+      }
+
+      onAccessError(targetPath, error);
+      return null;
+    }
+  }
+
+  function currentFolderIsRoot(targetPath) {
+    return targetPath === rootFolder;
+  }
+
   async function scan(currentFolder) {
-    const entries = await fs.readdir(currentFolder, { withFileTypes: true });
+    const entries = await tentar(
+      () => fs.readdir(currentFolder, { withFileTypes: true }),
+      currentFolder
+    );
+
+    if (!entries) {
+      return;
+    }
 
     for (const entry of entries) {
       const fullPath = path.join(currentFolder, entry.name);
@@ -65,7 +92,12 @@ export async function listarArquivos(rootFolder, options = {}) {
         continue;
       }
 
-      const stats = await fs.stat(fullPath);
+      const stats = await tentar(() => fs.stat(fullPath), fullPath);
+
+      if (!stats) {
+        continue;
+      }
+
       result.push(montarMetadados(fullPath, currentFolder, entry.name, stats));
     }
   }
