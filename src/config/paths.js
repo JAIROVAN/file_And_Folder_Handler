@@ -14,6 +14,7 @@ export const DEFAULT_REPORT_FOLDER = path.join(PROJECT_ROOT, "reports");
 export const XLSX_HANDLER_CANDIDATES = [
   process.env.XLSX_HANDLER_FOLDER,
   path.resolve(PROJECT_ROOT, "..", "xlsx_Handler"),
+  path.resolve(PROJECT_ROOT, "..", "xlsx_Handler", "xlsx_Handler"),
   path.resolve(PROJECT_ROOT, "..", "..", "xlsx_Handler")
 ].filter(Boolean);
 
