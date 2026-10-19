@@ -40,7 +40,7 @@ src/
 - `fileScanner.js`: lista arquivos com ou sem subpastas, filtra extensoes e ignora pastas como `node_modules`, `docsTxt` e `.git`.
 - `fileOps.js`: copia, renomeia, move e exclui arquivos com validacoes, sem sobrescrever por padrao, com suporte a `dryRun`.
 - `pdfUtils.js`: le texto de PDFs e processa todos os PDFs de uma pasta.
-- `planilhaReader.js`: le todas as abas de `.xlsx` (via `myExcel.js` do projeto `xlsx_Handler`, caminho em `XLSX_HANDLER_FOLDER`) e `.xls` (via SheetJS), com datas em `dd/mm/aaaa` e formulas pelo valor calculado.
+- `planilhaReader.js`: le todas as abas de `.xlsx` (via `myExcel.js` do projeto `xlsx_Handler`, caminho em `XLSX_HANDLER_FOLDER`) e `.xls` (via SheetJS, copiado em `src/vendor/sheetjs` para nao depender de `npm install`), com datas em `dd/mm/aaaa` e formulas pelo valor calculado.
 - `nfeExtractor.js`: extrai dados especificos de notas fiscais a partir do texto ja lido do PDF.
 - `reportUtils.js`: salva relatorios em JSON, CSV e TXT e formata relatorios de operacao.
 - `logger.js`: centraliza logs simples, erros, tabelas e resumo final.

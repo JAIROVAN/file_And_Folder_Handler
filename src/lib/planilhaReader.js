@@ -1,12 +1,16 @@
 import fs from "fs/promises";
 import path from "path";
 import { pathToFileURL } from "url";
-import * as XLSX from "xlsx";
+import * as XLSX from "../vendor/sheetjs/xlsx.mjs";
+import * as cptable from "../vendor/sheetjs/cpexcel.full.mjs";
 import { XLSX_HANDLER_FOLDER } from "../config/paths.js";
 
 export const EXTENSOES_PLANILHA = [".xls", ".xlsx"];
 
 const EXCEL_TEMP_PREFIX = "~$";
+
+// Codepages para .xls antigos (BIFF5 e anteriores) com acentos.
+XLSX.set_cptable(cptable);
 
 let myExcelPromise = null;
 

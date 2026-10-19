@@ -10,7 +10,6 @@
     "ler-planilhas": "node src/apps/lerPlanilhas.js"
   },
   "dependencies": {
-    "pdf-parse": "^1.1.1",
-    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
+    "pdf-parse": "^1.1.1"
   }
 }
