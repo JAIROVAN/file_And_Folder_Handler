@@ -3,7 +3,8 @@ import path from "path";
 import { pathToFileURL } from "url";
 import * as XLSX from "../vendor/sheetjs/xlsx.mjs";
 import * as cptable from "../vendor/sheetjs/cpexcel.full.mjs";
-import { XLSX_HANDLER_FOLDER } from "../config/paths.js";
+import { XLSX_HANDLER_CANDIDATES } from "../config/paths.js";
+import { caminhoExiste } from "./pathUtils.js";
 
 export const EXTENSOES_PLANILHA = [".xls", ".xlsx"];
 
@@ -14,10 +15,39 @@ XLSX.set_cptable(cptable);
 
 let myExcelPromise = null;
 
-function carregarMyExcel() {
+async function localizarMyExcel() {
+  for (const folder of XLSX_HANDLER_CANDIDATES) {
+    const myExcelPath = path.join(folder, "myExcel.js");
+
+    if (await caminhoExiste(myExcelPath)) {
+      return myExcelPath;
+    }
+  }
+
+  const procurados = XLSX_HANDLER_CANDIDATES.map((folder) => `  - ${folder}`).join("\n");
+  throw new Error(
+    `Projeto xlsx_Handler nao encontrado (necessario para ler .xlsx). Procurado em:\n${procurados}\n` +
+    "Coloque a pasta xlsx_Handler em um desses locais ou defina a variavel de ambiente XLSX_HANDLER_FOLDER."
+  );
+}
+
+async function importarMyExcel() {
+  const myExcelPath = await localizarMyExcel();
+
+  try {
+    return await import(pathToFileURL(myExcelPath).href);
+  } catch (error) {
+    if (error.code === "ERR_MODULE_NOT_FOUND" && error.message.includes("exceljs")) {
+      throw new Error(`O xlsx_Handler (${path.dirname(myExcelPath)}) esta sem o exceljs. Rode "npm install" nessa pasta.`);
+    }
+
+    throw error;
+  }
+}
+
+export function carregarMyExcel() {
   if (!myExcelPromise) {
-    const myExcelPath = path.join(XLSX_HANDLER_FOLDER, "myExcel.js");
-    myExcelPromise = import(pathToFileURL(myExcelPath).href);
+    myExcelPromise = importarMyExcel();
   }
 
   return myExcelPromise;

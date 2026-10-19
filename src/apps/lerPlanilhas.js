@@ -16,8 +16,9 @@
  *
  * Da raiz do projeto tambem funciona: node src\apps\lerPlanilhas.js "C:\pasta"
  *
- * Requisito: o projeto xlsx_Handler (com node_modules\exceljs instalado) deve estar na pasta
- * configurada em XLSX_HANDLER_FOLDER (src\config\paths.js).
+ * Requisito (para .xlsx): o projeto xlsx_Handler, com node_modules\exceljs instalado, deve estar
+ * ao lado desta pasta do projeto (ou um nivel acima). Outros locais: veja XLSX_HANDLER_CANDIDATES
+ * em src\config\paths.js.
  */
 
 import path from "path";
@@ -27,6 +28,7 @@ import { logError, logInfo, logTabela } from "../lib/logger.js";
 import { ehPasta } from "../lib/pathUtils.js";
 import {
   EXTENSOES_PLANILHA,
+  carregarMyExcel,
   ehArquivoTemporarioExcel,
   lerPlanilha
 } from "../lib/planilhaReader.js";
@@ -74,6 +76,11 @@ async function main() {
       .sort((a, b) => a.fullPath.localeCompare(b.fullPath));
 
     logInfo(`Planilhas encontradas: ${files.length}`);
+
+    // Falha logo no inicio (e uma vez so) se o xlsx_Handler nao estiver disponivel.
+    if (files.some((file) => file.extension.toLowerCase() === ".xlsx")) {
+      await carregarMyExcel();
+    }
 
     const dados = [];
     const resumo = [];
