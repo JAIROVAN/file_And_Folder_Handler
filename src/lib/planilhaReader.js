@@ -143,9 +143,16 @@ function lerAbaSheetJs(sheet) {
   const rows = [];
 
   for (let rowIndex = 0; rowIndex <= ultimaLinha; rowIndex += 1) {
+    const celulas = celulasPorLinha.get(rowIndex);
+
+    // Linhas sem nenhuma celula com conteudo sao descartadas.
+    if (!celulas) {
+      continue;
+    }
+
     const values = new Array(ultimaColuna + 1).fill("");
 
-    for (const [columnIndex, value] of celulasPorLinha.get(rowIndex) ?? []) {
+    for (const [columnIndex, value] of celulas) {
       values[columnIndex] = value;
     }
 
@@ -187,7 +194,7 @@ async function lerPlanilhaSheetJs(filePath) {
 
 async function lerPlanilhaXlsx(filePath) {
   const { readExcelAsRows } = await carregarMyExcel();
-  const sheets = await readExcelAsRows(filePath, { skipEmptyRows: false, emptyValue: "" });
+  const sheets = await readExcelAsRows(filePath, { skipEmptyRows: true, emptyValue: "" });
 
   return sheets.map(({ sheetName, rows }) => ({
     sheetName,
@@ -201,7 +208,7 @@ export function ehArquivoTemporarioExcel(fileName) {
 
 /**
  * Le todas as abas de um .xls, .xlsx ou .ods.
- * Retorna [{ sheetName, rows: [[...valores]] }], com linhas vazias preservadas,
+ * Retorna [{ sheetName, rows: [[...valores]] }], sem as linhas totalmente vazias,
  * datas como "dd/mm/aaaa" e formulas pelo valor calculado.
  */
 export async function lerPlanilha(filePath) {

@@ -91,7 +91,7 @@ const dados = [
 ];
 ```
 
-Cada linha de cada aba vira uma linha do array (inclusive linhas vazias entre os dados). Um segundo argumento opcional define outro caminho de saida. Requer `npm install` tambem no projeto `xlsx_Handler`.
+Cada linha com conteudo de cada aba vira uma linha do array (linhas totalmente vazias sao descartadas). Um segundo argumento opcional define outro caminho de saida. Requer `npm install` tambem no projeto `xlsx_Handler`.
 
 Tambem e possivel rodar direto:
 
